@@ -1,5 +1,8 @@
 from tkinter import *
 import math
+import json
+from tkinter import filedialog
+from PIL import ImageGrab
 
 master = Tk()
 master.title("2D Shape Engine")
@@ -260,6 +263,70 @@ def add_circle():
     select_square(None)
 
 
+def save_project():
+
+    file = filedialog.asksaveasfilename(
+        defaultextension=".spza",
+        filetypes=[
+            ("Shape Project", "*.spza"),
+            ("PNG Image", "*.png")
+        ]
+    )
+
+    if not file:
+        return
+
+    if file.endswith(".spza"):
+
+        with open(file, "w") as f:
+            json.dump(squares, f, indent=4)
+
+        print("Project saved")
+
+
+    elif file.endswith(".png"):
+
+        # Get canvas position
+        x = canvas.winfo_rootx()
+        y = canvas.winfo_rooty()
+
+        width = canvas.winfo_width()
+        height = canvas.winfo_height()
+
+        image = ImageGrab.grab(
+            (x, y, x + width, y + height)
+        )
+
+        image.save(file)
+
+        print("PNG saved")
+
+def open_project():
+
+    file = filedialog.askopenfilename(
+        filetypes=[
+            ("Shape Project", "*.spza")
+        ]
+    )
+
+    if not file:
+        return
+
+    with open(file, "r") as f:
+        loaded = json.load(f)
+
+    squares.clear()
+    square_list.delete(0, END)
+
+    for shape in loaded:
+        squares.append(shape)
+        square_list.insert(
+            END,
+            shape["type"].capitalize()
+        )
+
+    draw_squares()
+
 
 # Connect list click
 square_list.bind("<<ListboxSelect>>", select_square)
@@ -359,6 +426,18 @@ Button(
     text="Add Circle",
     command=add_circle
 ).grid(row=2, column=1, padx=5, pady=5)
+
+Button(
+    button_frame,
+    text="Save",
+    command=save_project
+).grid(row=3, column=0, padx=5, pady=5)
+
+Button(
+    button_frame,
+    text="Open",
+    command=open_project
+).grid(row=3, column=1, padx=5, pady=5)
 
 # First square
 add_square()
