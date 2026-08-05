@@ -5,7 +5,7 @@ A simple shape engine that lets you create 2D models.
 
 Open the program by double-clicking the main.exe file
 
-Opening the program will welcome the user with a square that can be sized,rotated ,painted with the buttons shown.
+Opening the program will welcome the user with a square that can be sized,rotated,copy/pasted,duplicated,painted with the buttons shown.
 The program also has other shape choices like triangles and circles.
 
 Any questions , bug fix requests can be referred to: shapezebriasupport@gmail.com
